@@ -9,10 +9,13 @@ public class Draggable : MonoBehaviour
     private Camera mainCamera;
     // Animations
     [SerializeField]
-    private float snapTime = 0.1f;
+    private float snapTime = 1f;
     [SerializeField]
     private float popSize = 1.2f;
+    [SerializeField]
     private float popTime = 0.3f;
+    
+    
     private float animationTimer = 0f;
 
     private void OnMouseDown() {
