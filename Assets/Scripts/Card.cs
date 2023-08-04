@@ -29,15 +29,19 @@ public enum Rank {
 
 [RequireComponent(typeof(SpriteRenderer))]
 public class Card : MonoBehaviour {
-    
+
     private SpriteRenderer spriteRenderer;
 
+    // Card data
     public bool isFaceUp = true;
     public Rank rank = Rank.Two;
     public Suit suit = Suit.Clubs;
 
-
-    private bool scheduledRefresh;
+    private bool scheduledRefresh; // Sprite refresh to match ifFaceUp
+    private bool flipAnimationRunning = false;
+    [SerializeField]
+    private float flipAnimationTime = 0.65f;
+    private float flipAnimationTimer = 0f;
     
     private void Start() {
         ShowFront();
@@ -55,15 +59,30 @@ public class Card : MonoBehaviour {
             RefreshCard();
             scheduledRefresh = false;
         }
+        if (flipAnimationRunning) {
+            flipAnimationTimer += Time.deltaTime;
+
+            if (flipAnimationTimer < flipAnimationTime) {
+                if(flipAnimationTimer < flipAnimationTime / 2) // First half of the animation
+                    transform.rotation = Quaternion.Euler(Vector3.Lerp(Vector3.zero, Vector3.up * 90f, flipAnimationTimer / (flipAnimationTime / 2)));
+                else {
+                    transform.rotation = Quaternion.Euler(Vector3.Lerp(Vector3.up * 90f, Vector3.zero, (flipAnimationTimer - (flipAnimationTime / 2)) / (flipAnimationTime / 2)));
+                    RefreshCard(); // update sprite after half of the animation
+                }
+            }
+            else {
+                flipAnimationRunning = false;
+            }
+        }
     }
 
     private void ShowFront() {
-        Sprite cardFront = CardController.Instance.GetSpriteByCard(this);
+        Sprite cardFront = CardController.Instance.GetCardSprite(this);
         spriteRenderer.sprite = cardFront;
     }
 
     private void ShowBack() {
-        Sprite cardBack = CardController.Instance.GetCardBack();
+        Sprite cardBack = CardController.Instance.GetCardBackSprite();
         spriteRenderer.sprite = cardBack;
     }
     
@@ -75,6 +94,11 @@ public class Card : MonoBehaviour {
             ShowBack();
         }
     }
+    // false - show back, true - show front
+    public void PlayFlipAnimation(bool flip)
+    {
+        flipAnimationRunning = true;
+    }
 
     private void OnValidate() {
         scheduledRefresh = true;
@@ -83,9 +107,8 @@ public class Card : MonoBehaviour {
     private void OnMouseOver () {
         if (Input.GetMouseButtonDown(1)) {
             isFaceUp = !isFaceUp;
-            RefreshCard();
+            flipAnimationTimer = 0f;
+            flipAnimationRunning = true;
         }
     }
-
-    
 }

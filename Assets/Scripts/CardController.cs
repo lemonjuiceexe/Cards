@@ -12,12 +12,12 @@ public class CardController : MonoBehaviour {
 
     public int cardBackIndex = 0;
     
-    public Sprite GetSpriteByCard(Card card) {
+    public Sprite GetCardSprite(Card card) {
         int cardIndex = (int)card.rank - 2;
         return cardFaces[(int)card.suit * 13 + cardIndex];
     }
     
-    public Sprite GetCardBack() {
+    public Sprite GetCardBackSprite() {
         return cardBacks[cardBackIndex];
     }
     

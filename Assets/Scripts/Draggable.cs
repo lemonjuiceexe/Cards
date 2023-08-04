@@ -14,8 +14,6 @@ public class Draggable : MonoBehaviour
     private float popSize = 1.2f;
     [SerializeField]
     private float popTime = 0.3f;
-    
-    
     private float animationTimer = 0f;
 
     private void OnMouseDown() {
@@ -36,8 +34,7 @@ public class Draggable : MonoBehaviour
             transform.localScale = Vector2.Lerp(Vector2.one, Vector2.one * popSize, animationTimer / popTime);
         }
     }
-    private void OnMouseUp()
-    {
+    private void OnMouseUp() {
         transform.localScale = Vector2.one;
     }
 }

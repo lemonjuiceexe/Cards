@@ -480,6 +480,7 @@ MonoBehaviour:
   isFaceUp: 1
   rank: 14
   suit: 0
+  flipAnimationTime: 0.65
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
