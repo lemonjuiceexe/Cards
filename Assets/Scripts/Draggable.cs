@@ -7,6 +7,9 @@ public class Draggable : MonoBehaviour
 {
     [SerializeField]
     private Camera mainCamera;
+    private SpriteRenderer spriteRenderer;
+    //
+    public static int highestSortingOrder = 0;
     // Animations
     [SerializeField]
     private float snapTime = 1f;
@@ -16,8 +19,13 @@ public class Draggable : MonoBehaviour
     private float popTime = 0.3f;
     private float animationTimer = 0f;
 
+    private void Awake() {
+        spriteRenderer = GetComponent<SpriteRenderer>();
+    }
+
     private void OnMouseDown() {
         animationTimer = 0f;
+        spriteRenderer.sortingOrder = ++highestSortingOrder;
     }
     
     private void OnMouseDrag() {
